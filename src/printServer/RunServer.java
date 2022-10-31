@@ -12,7 +12,7 @@ public class RunServer {
 
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
         // encrypt all plain passwords
-        encryptPasswords();
+        //encryptPasswords();
 
         // initialize the printserver object
         server = new PrintServer();

@@ -1,9 +1,12 @@
 package printServer;
 
+import db.userDatabase;
+
 import java.io.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.util.LinkedList;
 
 public class PrintServer  extends UnicastRemoteObject implements IPrintServer {
@@ -11,6 +14,8 @@ public class PrintServer  extends UnicastRemoteObject implements IPrintServer {
     boolean isServerStarted = false;
     public int queueNo = 1;
     private LinkedList<PrinterQueue> printQueue = new LinkedList<PrinterQueue>();
+
+    private final userDatabase udb = new userDatabase();
 
     public PrintServer() throws RemoteException {
         super();
@@ -141,27 +146,27 @@ public class PrintServer  extends UnicastRemoteObject implements IPrintServer {
     }
 
     @Override
-    public boolean isAuthorized(String username, String password) {
-        FileReader fReader = null;
-        try {
-            fReader = new FileReader("enc_passwords.txt");
-            BufferedReader bReader = new BufferedReader(fReader);
-            String line;
-            while ((line = bReader.readLine()) != null) {
-                if(line.contains(username)) {
-                    String correctEncPassword = line.split(":")[1];
-                    if(correctEncPassword.equals(PasswordEncrypter.getEncryptedPassword(password)))
-                        return true;
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return false;
+    public boolean isAuthorized(String username, String password) throws SQLException, NoSuchAlgorithmException {
+//        FileReader fReader = null;
+//        try {
+//            fReader = new FileReader("enc_passwords.txt");
+//            BufferedReader bReader = new BufferedReader(fReader);
+//            String line;
+//            while ((line = bReader.readLine()) != null) {
+//                if(line.contains(username)) {
+//                    String correctEncPassword = line.split(":")[1];
+//                    if(correctEncPassword.equals(PasswordEncrypter.getEncryptedPassword(password)))
+//                        return true;
+//                }
+//            }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
+        return udb.search(username,password);
     }
 
 //    public boolean isStarted() throws Exception {
