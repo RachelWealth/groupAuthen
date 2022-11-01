@@ -26,7 +26,7 @@ public class userDatabase {
     private void __insert__(String name,String pw) throws SQLException, NoSuchAlgorithmException {
         Connection con = this.connect();
         Statement st=con.createStatement();
-        String sql="insert into user values(" + "u2" + ","+String.valueOf(PasswordEncrypter.getEncryptedPassword(pw))+");";
+        String sql="insert into user values('" +name +"'"+ ",'"+String.valueOf(PasswordEncrypter.getEncryptedPassword(pw))+"');";
         System.out.println(String.valueOf(PasswordEncrypter.getEncryptedPassword(pw)));
         st.executeUpdate(sql);
     }

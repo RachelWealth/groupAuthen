@@ -14,6 +14,7 @@ public class PasswordEncrypter
         byte[] salt1 = new byte[16];
         random.nextBytes(salt1);
         byte[] salt = "helloworld".getBytes();
+        //TODO:input the salt in database user.db
         md.update(salt);
         return md.digest(input.getBytes());
     }

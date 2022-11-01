@@ -48,6 +48,7 @@ public class PrintClient {
         System.out.println("Enter Password");
         String pass = scanner.nextLine();
         if (printServer.isAuthorized(user, pass)) {
+            System.out.println("Authenticated!");
             return true;
         }
         throw new Exception("Invalid credentials!");
