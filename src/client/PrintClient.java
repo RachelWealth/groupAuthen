@@ -1,17 +1,21 @@
 package client;
 
 import printServer.IPrintServer;
+import printServer.PrintServer;
+import session.sessionManager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class PrintClient {
     private static Scanner scanner = new Scanner(System.in);
     private static IPrintServer printServer;
-
+    private static UUID token;
+    public static String username;
     public static void main(String[] args) {
         connectToRemotePrintServer();
         showMenu();
@@ -42,15 +46,17 @@ public class PrintClient {
         }
     }
 
-    public static boolean authenticateUser() throws Exception {
+    public static String authenticateUser() throws Exception {
         System.out.println("Enter UserName");
         String user = scanner.nextLine();
         System.out.println("Enter Password");
         String pass = scanner.nextLine();
         if (printServer.isAuthorized(user, pass)) {
+            username = user;
             System.out.println("Authenticated!");
-            return true;
+            return user;
         }
+
         throw new Exception("Invalid credentials!");
     }
 
@@ -81,62 +87,61 @@ public class PrintClient {
             try {
                 switch(input) {
                     case "1":
-                        authenticateUser();
-                        printServer.start();
+                        username = authenticateUser();
+                        token=printServer.start(username);
                         System.out.println("Printer has been started");
                         break;
 
                     case "2":
-                        authenticateUser();
-                        printServer.stop();
+
+                        printServer.stop(token);
                         System.out.println("Printer is stopped");
                         break;
 
                     case "3":
-                        authenticateUser();
-                        printServer.restart();
+
+                        printServer.restart(token);
                         System.out.println("Printer is restarted");
                         break;
 
                     case "4":
-                        authenticateUser();
+
                         System.out.println("Enter File Name");
                         System.out.println("(e.g.  'mounika.txt' or 'chandni.doc')");
                         String file = scanner.nextLine();
                         System.out.println("Enter Printer Number");
                         System.out.println("e.g. choose any between '1' or '10'");
                         String printer = scanner.nextLine();
-                        printServer.print(file, printer);
+                        printServer.print(file, printer,token);
                         System.out.println("Successfully Queued...");
                         System.out.println("view Queue status");
                         break;
 
                     case "5":
-                        authenticateUser();
+
                         if(printServer.isStarted()) {
                             System.out.println("Enter Printer Number");
                             System.out.println("e.g. choose the same printer number selected previously");
                             String printer1 = scanner.nextLine();
                             System.out.println("JobNumber\t\tFileName\t\tPrinter");
-                            System.out.println(printServer.queue(printer1));
+                            System.out.println(printServer.queue(printer1,token));
                         }
                         break;
 
                     case "6":
-                        authenticateUser();
                         if(printServer.isStarted()) {
                             System.out.println("Enter Printer Number");
                             System.out.println("e.g. choose any between '1' or '10'");
                             String printerName = scanner.nextLine();
                             System.out.println("Enter job number");
                             String jobString = scanner.nextLine();
-                            printServer.topQueue(printerName, Integer.valueOf(jobString));
+                            printServer.topQueue(printerName, Integer.valueOf(jobString),token);
                             System.out.println("Job scheduled");
                         }
                         break;
 
                     case "7":
-                        authenticateUser();
+
                         System.out.println("Enter parameter");
                         System.out.println("e.g. choose 'port', 'host' or 'name'");
                         String parameter = scanner.nextLine();
@@ -144,7 +149,7 @@ public class PrintClient {
                         break;
 
                     case "8":
-                        authenticateUser();
+
                         System.out.println("Enter parameter");
                         System.out.println("e.g. choose 'port', 'host' or 'name'");
                         String param = scanner.nextLine();
@@ -154,13 +159,13 @@ public class PrintClient {
                         break;
 
                     case "9":
-                        authenticateUser();
+
 //                        if(printServer.isStarted()) {
                             System.out.println("Enter Printer Number");
                             System.out.println("e.g. choose any between '1' or '10'");
                             String printerName = scanner.nextLine();
 
-                            if (printServer.status(printerName)) {
+                            if (printServer.status(printerName,token)) {
                                 System.out.println("Printer Status: " + "ONLINE"+"\n");
                             } else {
                                 System.out.println("Printer Status: " + "OFFLINE"+"\n");

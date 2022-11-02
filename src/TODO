@@ -1,0 +1,21 @@
+Good evening guys, I have run the code just now. It is a nice programme which have implement all the interface.
+However, there are some problem may need to improve:
+finished-Duan-1. session authentication. It seems in this programme, no session authentication exists. And I read the assignment describe, it seems it's needed. To confirm whether the session is legal.
+finished-Duan-2. User authentication repeat. Every operation requires input username and password, this is a little complex and not customer friendly.
+3. Readme.md file. This is just in case while the professor or ATs check our code but don't know how to use it.
+finished-Duan-4. And may I ask do you use public file to store password? And why you choose this?
+5. Logic problem: I didn't 'start' the printers, but can still use other functions.
+6. setConfig seems not finished.
+7. Add Salt into database.
+
+
+
+Not too important but just an advice:
+1. code specification.
+    a. Commend of code is essential.
+    b. name of variables. Too many name like 'var0', 'var1'.
+
+
+
+Evaluation:
+1. password transport by plaintext
