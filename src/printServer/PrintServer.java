@@ -126,6 +126,7 @@ public class PrintServer  extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public boolean status(String printer, UUID token) {
+        //TODO is running
         try {
             if (!seMan.isSessionValid(token)) {
                 System.out.println("session expired");
