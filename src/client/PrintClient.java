@@ -88,6 +88,7 @@ public class PrintClient {
                 switch(input) {
                     case "1":
                         username = authenticateUser();
+
                         token=printServer.start(username);
                         System.out.println("Printer has been started");
                         break;

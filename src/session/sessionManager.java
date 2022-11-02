@@ -24,10 +24,10 @@ public class sessionManager {
     public static boolean isSessionValid(UUID token){
         session se = __session__.get(token);
         if(se==null) return false;
-        System.out.println(System.currentTimeMillis()+" "+(System.currentTimeMillis()-se.loginStartTime));
+        //System.out.println(System.currentTimeMillis()+" "+(System.currentTimeMillis()-se.loginStartTime));
         se.isSessionExpired = ((System.currentTimeMillis()-se.loginStartTime)>se.expirationTime);
         if (se.isSessionExpired)
-                killSession(token);
+            killSession(token);
         return !se.isSessionExpired;
     }
     public static void killSession(UUID token){

@@ -43,7 +43,7 @@ public class RunServer {
         while((line = bin.readLine()) != null) {
             String user = line.split(":")[0];
             String pass = line.split(":")[1];
-            String encPass = PasswordEncrypter.getEncryptedPassword(pass);
+            String encPass = PasswordEncrypter.getEncryptedPassword(pass,null);
             pwriter.println(user+":"+encPass);
         }
         pwriter.close();

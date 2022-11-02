@@ -7,13 +7,16 @@ import java.io.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.NoSuchAlgorithmException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.UUID;
 
 public class PrintServer  extends UnicastRemoteObject implements IPrintServer {
 
     boolean isServerStarted = false;
+    //boolean isServerStarted = true;
     public int queueNo = 1;
     private LinkedList<PrinterQueue> printQueue = new LinkedList<PrinterQueue>();
 
@@ -68,7 +71,7 @@ public class PrintServer  extends UnicastRemoteObject implements IPrintServer {
     public void topQueue(String printer, int job, UUID token) {
         try {
             if (isStarted()) {
-                if (!seMan.isSessionValid(token)) {
+                if (!sessionManager.isSessionValid(token)) {
                     System.out.println("session expired");
                     return;
                 }
@@ -93,7 +96,7 @@ public class PrintServer  extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public UUID start(String user) {
-        UUID token = seMan.generateSession(user);
+        UUID token = sessionManager.generateSession(user);
         isServerStarted = true;
         System.out.println("start() invoked");
         return token;
@@ -102,7 +105,7 @@ public class PrintServer  extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public void stop( UUID token) {
-        if (!seMan.isSessionValid(token)) {
+        if (!sessionManager.isSessionValid(token)) {
             System.out.println("session expired");
             return;
         }
@@ -113,7 +116,7 @@ public class PrintServer  extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public void restart( UUID token) {
-        if (!seMan.isSessionValid(token)) {
+        if (!sessionManager.isSessionValid(token)) {
             System.out.println("session expired");
             return;
         }
@@ -128,7 +131,7 @@ public class PrintServer  extends UnicastRemoteObject implements IPrintServer {
     public boolean status(String printer, UUID token) {
         //TODO is running
         try {
-            if (!seMan.isSessionValid(token)) {
+            if (!sessionManager.isSessionValid(token)) {
                 System.out.println("session expired");
                 return false;
             }
@@ -179,8 +182,16 @@ public class PrintServer  extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public boolean isAuthorized(String username, String password) throws SQLException, NoSuchAlgorithmException {
-
-        return udb.search(username,password);
+        ResultSet rs = udb.search(username);
+        while (rs.next()){
+//            System.out.println(rs.getString("pw"));
+//            System.out.println(rs.getString("salt"));
+//            System.out.println(PasswordEncrypter.getEncryptedPassword(password, rs.getString("salt")));
+            if(Objects.equals(rs.getString("pw"), PasswordEncrypter.getEncryptedPassword(password, rs.getString("salt")))){
+                return true;
+            }
+        }
+        return false;
     }
 
 //    public boolean isStarted() throws Exception {

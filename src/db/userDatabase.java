@@ -26,20 +26,19 @@ public class userDatabase {
     private void __insert__(String name,String pw) throws SQLException, NoSuchAlgorithmException {
         Connection con = this.connect();
         Statement st=con.createStatement();
-        String sql="insert into user values('" +name +"'"+ ",'"+String.valueOf(PasswordEncrypter.getEncryptedPassword(pw))+"');";
-        System.out.println(String.valueOf(PasswordEncrypter.getEncryptedPassword(pw)));
+        String sql="insert into user values('" +name +"'"+ ",'"+String.valueOf(PasswordEncrypter.getEncryptedPassword(pw,null))+"');";
+
         st.executeUpdate(sql);
     }
     public void add() throws SQLException, NoSuchAlgorithmException {
         //this.__insert__("user1","000");
         this.__insert__("user2","111");
     }
-    public synchronized boolean search(String name, String pw) throws SQLException, NoSuchAlgorithmException {
+    public synchronized ResultSet search(String name) throws SQLException, NoSuchAlgorithmException {
         Connection con = this.connect();
-        String sql="select * from " + this.db+ " where user= '"+name+"'"+ " and pw = '"+PasswordEncrypter.getEncryptedPassword(pw)+"'";
+        String sql="select * from " + this.db+ " where user= '"+name+"'";
 
         Statement st=con.createStatement();
-        ResultSet rs = st.executeQuery(sql);
-        return rs.next();
+        return st.executeQuery(sql);
     }
 }

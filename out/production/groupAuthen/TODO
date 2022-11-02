@@ -6,6 +6,7 @@ finished-Duan-2. User authentication repeat. Every operation requires input user
 finished-Duan-4. And may I ask do you use public file to store password? And why you choose this?
 5. Logic problem: I didn't 'start' the printers, but can still use other functions.
 6. setConfig seems not finished.
+//TODO
 7. Add Salt into database.
 
 
