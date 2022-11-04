@@ -6,8 +6,6 @@ import java.security.NoSuchAlgorithmException;
 
 public class RunServer {
 
-    public static final String PLAIN_PASSWORD_FILE_NAME = "plain_passwords.txt";
-    public static final String ENCRYPTED_PASSWORD_FILE_NAME = "enc_passwords.txt";
     private static IPrintServer server;
 
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
@@ -33,20 +31,6 @@ public class RunServer {
         Registry registry = java.rmi.registry.LocateRegistry.createRegistry(Integer.parseInt(port));
         registry.rebind(name, server);
 
-    }
-
-    private static void encryptPasswords() throws IOException, NoSuchAlgorithmException {
-        FileReader fin = new FileReader(PLAIN_PASSWORD_FILE_NAME);
-        BufferedReader bin = new BufferedReader(fin);
-        PrintWriter pwriter = new PrintWriter(ENCRYPTED_PASSWORD_FILE_NAME);
-        String line;
-        while((line = bin.readLine()) != null) {
-            String user = line.split(":")[0];
-            String pass = line.split(":")[1];
-            String encPass = PasswordEncrypter.getEncryptedPassword(pass,null);
-            pwriter.println(user+":"+encPass);
-        }
-        pwriter.close();
     }
 
 }
