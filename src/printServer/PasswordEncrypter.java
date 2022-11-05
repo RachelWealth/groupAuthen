@@ -26,9 +26,7 @@ public class PasswordEncrypter
         }else{
             salt = salt0.getBytes();
         }
-
         md.update(salt);
-
         return md.digest(input.getBytes());
     }
 //        Byte to Hex

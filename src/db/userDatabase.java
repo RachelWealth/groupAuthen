@@ -12,8 +12,7 @@ public class userDatabase {
         Connection con=null;
         try{
             Class.forName("org.sqlite.JDBC");
-
-            String PATH_DB = "E:\\0Postgraduate\\study\\data security\\slide_2022\\authentication\\groupAuthen\\src\\db\\user.db";
+            String PATH_DB = "src\\db\\user.db";
             String url = "jdbc:sqlite:" + PATH_DB;
             con=DriverManager.getConnection(url);
             System.out.println();
